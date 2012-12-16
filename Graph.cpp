@@ -46,7 +46,7 @@ void Graph::read(string fileName)
 void Graph::setVertex(int v, int x, int y)
 {
   if(v < 0 || n <= v)
-    throw new Exception("Vertex out of bounds !");
+    throw new Exception("Vertex out of bounds");
   this->x[v] = x;
   this->y[v] = y;
 }
@@ -54,6 +54,6 @@ void Graph::setVertex(int v, int x, int y)
 int Graph::getDistance(int a, int b)
 {
   if(a < 0 || b < 0 || n <= a || n <= b)
-    throw new Exception("Vertex out of bounds !");
+    throw new Exception("Vertex out of bounds");
   return round(sqrt((x[a]-x[b])*(x[a]-x[b])+(y[a]-y[b])*(y[a]-y[b])));
 }

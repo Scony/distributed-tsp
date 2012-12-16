@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "Server.h"
+#include "TspServer.h"
+#include "Dispatcher.h"
 
 using namespace std;
 
@@ -8,7 +9,8 @@ int main(int argc, char ** argv)
 {
   try
     {
-      Server server(argc,argv);
+      Dispatcher dispatcher(argc,argv);
+      TspServer server(argc,argv,&dispatcher);
       server.run();
     }
   catch (Exception * e)

@@ -1,4 +1,4 @@
 all:
-	g++ *.cpp -o main.out
+	g++ -Wall *.cpp -o main.out
 clean:
 	rm -f *.o *~

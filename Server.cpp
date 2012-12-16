@@ -1,7 +1,5 @@
 #include "Server.h"
 
-// using namespace std;
-
 Server::Server(int argc, char ** argv)
 {
   if(argc > 1)
@@ -14,7 +12,7 @@ Server::Server(int argc, char ** argv)
 
   this->sd = socket(AF_INET,SOCK_STREAM,0);
   if(this->sd == -1)
-    throw new Exception("socket fail");
+    throw new Exception("Socket fail");
 
   this->init();
 }
@@ -33,7 +31,7 @@ void Server::init()
   myaddr.sin_addr.s_addr = INADDR_ANY;
   int bd = bind(sd,(struct sockaddr *)&myaddr,sizeof(myaddr));
   if(bd == -1)
-    throw new Exception("bind fail");
+    throw new Exception("Bind fail");
 }
 
 void Server::run()
@@ -42,7 +40,7 @@ void Server::run()
   int oaddrlen = sizeof(oaddr);
   int ld = listen(sd,99);
   if(ld == -1)
-    throw new Exception("listen fail");
+    throw new Exception("Listen fail");
   fd_set rfds;
   while(1)
     {
@@ -52,16 +50,22 @@ void Server::run()
 	  FD_SET(i,&rfds);
       int sc = select(1024,&rfds,NULL,NULL,NULL);
       if(sc == -1)
-	throw new Exception("select fail");
+	throw new Exception("Select fail");
       printf("[%d] ",sc);
       if(FD_ISSET(0,&rfds))
 	{
 	  memset(buff,'\0',255);
 	  int re = read(0,buff,255);
-	  // buff[re-1] = '\0';
+	  if(re==0)
+	    {
+	      fds[0] = 0;
+	      continue;
+	    }
+	  printf("[%d] ",re);
+	  buff[re-1] = '\0';
+	  printf("Console: %s\n",buff);
 	  if(!strcmp("exit",buff))
 	    break;
-	  printf("Console: %s\n",buff);
 	}
       if(FD_ISSET(sd,&rfds))
 	{

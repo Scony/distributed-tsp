@@ -12,13 +12,12 @@
 #include <string.h>
 
 #include "Exception.h"
-#include "Graph.h"
 
 typedef struct sockaddr_in sockaddr_in;
 
 class Server
 {
-  Graph graph;
+ protected:
   int port;
   int sd;
   bool fds[1024];
@@ -28,7 +27,7 @@ class Server
  public:
   Server(int argc, char ** argv);
   ~Server();
-  void run();
+  virtual void run();
 };
 
 #endif
