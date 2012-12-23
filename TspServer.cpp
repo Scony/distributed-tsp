@@ -1,5 +1,9 @@
 #include "TspServer.h"
 
+#define BUFFER 255
+
+using namespace std;
+
 TspServer::TspServer(int argc, char ** argv, Dispatcher * dispatcher) :
   Server(argc,argv)
 {
@@ -12,7 +16,7 @@ TspServer::~TspServer()
 
 void TspServer::run()
 {
-  char buff[255];
+  char buff[BUFFER];
   int oaddrlen = sizeof(oaddr);
   if(listen(sd,99) == -1)
     throw new Exception("Listen fail");
@@ -29,7 +33,7 @@ void TspServer::run()
       printf("[%d] ",sc);
       if(FD_ISSET(0,&rfds))
 	{
-	  int re = read(0,buff,255);
+	  int re = read(0,buff,BUFFER);
 	  if(re == 0)
 	    {
 	      fds[0] = 0;
@@ -47,23 +51,28 @@ void TspServer::run()
 	    throw new Exception("Accept fail");
 	  printf("New connection #%d\n",ad);
 	  fds[ad] = 1;
-	  dispatcher->request(ad,"MAP");
+	  string re = dispatcher->request(ad,"MAP");
+	  write(ad,re.c_str(),re.length());
 	}
       for(int i = 3; i < 1024; i++)
 	if(i != sd && FD_ISSET(i,&rfds))
 	  {
-	    memset(buff,'\0',255);
-	    int ed = read(i,buff,255);
+	    memset(buff,'\0',BUFFER);
+	    int ed = read(i,buff,BUFFER);
 	    if(ed==0)
 	      {
 		close(i);
 		fds[i] = 0;
 		printf("#%d: disconnected.",i);
-		dispatcher->request(i,buff);
+		buff[ed-1] = '\0';
+		string re = dispatcher->request(i,buff);
+		write(i,re.c_str(),re.length());
 		continue;
 	      }
 	    printf("#%d: %s\n",i,buff);
-	    dispatcher->request(i,buff);
+	    buff[ed-1] = '\0';
+	    string re = dispatcher->request(i,buff);
+	    write(i,re.c_str(),re.length());
 	  }
     }
 }

@@ -19,6 +19,8 @@ public:
   void read();
   void read(std::string fileName);
   int getDistance(int v1, int v2);
+  int getN();
+  std::string toString();
 };
 
 #endif

@@ -41,6 +41,29 @@ void Graph::read()
 
 void Graph::read(string fileName)
 {
+  FILE * fp;
+  if((fp = fopen(fileName.c_str(),"r")))
+    {
+      char buffer[255];
+      fscanf(fp,"NAME: %s\n",buffer);
+      fscanf(fp,"COMMENT: %[^\n]\n",buffer);
+      fscanf(fp,"TYPE: %s\n",buffer);
+      fscanf(fp,"DIMENSION: %d\n",&this->n);
+      fscanf(fp,"%[^\n]\n",buffer);
+      fscanf(fp,"%[^\n]\n",buffer);
+
+      this->x = new int[this->n];
+      this->y = new int[this->n];
+
+      for(int i = 0; i < this->n; i++)
+	{
+	  int v, x, y;
+	  fscanf(fp,"%d %d %d",&v,&x,&y);
+	  this->setVertex(v-1,x,y);
+	}
+    }
+  else
+    throw new Exception("Cannot read graph");
 }
 
 void Graph::setVertex(int v, int x, int y)
@@ -56,4 +79,23 @@ int Graph::getDistance(int a, int b)
   if(a < 0 || b < 0 || n <= a || n <= b)
     throw new Exception("Vertex out of bounds");
   return round(sqrt((x[a]-x[b])*(x[a]-x[b])+(y[a]-y[b])*(y[a]-y[b])));
+}
+
+int Graph::getN()
+{
+  return this->n;
+}
+
+string Graph::toString()
+{
+  char buff[32];
+  sprintf(buff,"%d ",this->n);
+  string out = string(buff);
+  for(int i = 0; i < this->n; i++)
+    {
+      sprintf(buff,"%d %d ",this->x[i],this->y[i]);
+      out += string(buff);
+    }
+
+  return out;
 }

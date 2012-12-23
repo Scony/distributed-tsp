@@ -4,8 +4,8 @@ if [ -z $1 ]; then
     echo "Usage: template [class_name]"
 else
 
-echo "#ifndef $1_H
-#define $1_H
+echo "#ifndef $2_H
+#define $2_H
 
 class $1
 {
