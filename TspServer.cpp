@@ -41,8 +41,7 @@ void TspServer::run()
 	    }
 	  buff[re-1] = '\0';
 	  printf("#0: %s\n",buff);
-	  if(!dispatcher->interpret(buff))
-	    break;
+	  printf("%s\n",dispatcher->interpret(buff).c_str());
 	}
       if(FD_ISSET(sd,&rfds))
 	{

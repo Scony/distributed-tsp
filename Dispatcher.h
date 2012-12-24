@@ -19,7 +19,7 @@ class Dispatcher
  public:
   Dispatcher(int argc, char ** argv);
   ~Dispatcher();
-  bool interpret(std::string query);
+  std::string interpret(std::string query);
   std::string request(int id, std::string query);
 };
 

@@ -7,6 +7,7 @@
 
 class Individual
 {
+ protected:
   int n;
   int * ord;
   long long rate;

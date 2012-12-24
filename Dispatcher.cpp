@@ -2,6 +2,13 @@
 
 using namespace std;
 
+string int2str(int var)
+{
+  char buff[16];
+  sprintf(buff,"%d",var);
+  return string(buff);
+}
+
 Dispatcher::Dispatcher(int argc, char ** argv)
 {
   for(int i = 0; i < MAX_RECORDS; i++)
@@ -23,22 +30,42 @@ Dispatcher::~Dispatcher()
       delete records[i];
 }
 
-bool Dispatcher::interpret(string query)
+string Dispatcher::interpret(string query)
 {
-  cout << "::" << query << "::" << endl;
-  if(query=="lol")
-    cout << graph.getDistance(1,10);
-  return query == "exit" ? false : true;
+  // cout << "::" << query << "::" << endl;
+  if(query == "test")
+    return int2str(graph.getDistance(1,10));
+  if(query == "get clients")
+    {
+      int count = 0;
+      for(int i = 0; i < MAX_RECORDS; i++)
+	if(records[i])
+	  count++;
+      return int2str(count);
+    }
+  return "Wrong command";
 }
 
 string Dispatcher::request(int id, string query)
 {
   if(!records[id])
     records[id] = new Record();
-  cout << "::" << query << "::" << endl;
-  if(query=="MAP")
+
+  // cout << "::" << query << "::" << endl;
+
+  if(query == "MAP")		// map
     return graph.toString();
-  if(query=="IND")
-    return individuals.front().toString();
-  return "some re";
+  if(query.substr(0,3) == "IND") // individual
+    {
+      //read given ind
+      return individuals.front().toString();
+    }
+  if(query == "FRQ")		// frequence
+    return int2str(records[id]->getFrequence());
+  if(query == "MUT")		// mutations
+    return int2str(records[id]->getMutations());
+  if(query == "POP")		// population
+    return int2str(records[id]->getPopulation());
+
+  return "WCM";			// wrong command
 }
