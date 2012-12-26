@@ -33,15 +33,18 @@ void TspServer::run()
       printf("[%d] ",sc);
       if(FD_ISSET(0,&rfds))
 	{
-	  int re = read(0,buff,BUFFER);
-	  if(re == 0)
+	  int rc = read(0,buff,BUFFER);
+	  if(rc == 0)
 	    {
 	      fds[0] = 0;
 	      continue;
 	    }
-	  buff[re-1] = '\0';
+	  buff[rc-1] = '\0';
 	  printf("#0: %s\n",buff);
-	  printf("%s\n",dispatcher->interpret(buff).c_str());
+	  string re = dispatcher->interpret(buff);
+	  if(re == "")
+	    break;
+	  printf("%s\n",re.c_str());
 	}
       if(FD_ISSET(sd,&rfds))
 	{

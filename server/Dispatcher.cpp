@@ -32,9 +32,12 @@ Dispatcher::~Dispatcher()
 
 string Dispatcher::interpret(string query)
 {
-  // cout << "::" << query << "::" << endl;
+  if(query == "exit")
+    return "";
   if(query == "test")
-    return int2str(graph.getDistance(1,10));
+    return int2str(graph.getDistance(0,1));
+  if(query == "best")
+    return int2str(individuals.front().getRate());
   if(query == "get clients")
     {
       int count = 0;
@@ -51,13 +54,27 @@ string Dispatcher::request(int id, string query)
   if(!records[id])
     records[id] = new Record();
 
-  // cout << "::" << query << "::" << endl;
-
   if(query == "MAP")		// map
     return graph.toString();
   if(query.substr(0,3) == "IND") // individual
     {
-      //read given ind
+      char buff[32];
+      int offset = 4;
+      int n;
+      sscanf(query.substr(offset,32).c_str(),"%s",buff);
+      sscanf(query.substr(offset,32).c_str(),"%d",&n);
+      offset += strlen(buff) + 1;
+      int ord[n];
+      for(int i = 0; i < n; i++)
+	{
+	  sscanf(query.substr(offset,32).c_str(),"%s",buff);
+	  sscanf(query.substr(offset,32).c_str(),"%d",&ord[i]);
+	  offset += strlen(buff) + 1;
+	}
+
+      individuals.push_back(Individual(n,&this->graph,ord));
+      individuals.sort();
+
       return individuals.front().toString();
     }
   if(query == "FRQ")		// frequence
@@ -67,5 +84,5 @@ string Dispatcher::request(int id, string query)
   if(query == "POP")		// population
     return int2str(records[id]->getPopulation());
 
-  return "WCM";			// wrong command
+  return "-1";			// wrong command
 }

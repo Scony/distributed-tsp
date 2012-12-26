@@ -2,6 +2,7 @@
 #define DISPATCHER_H
 
 #include <iostream>
+#include <string.h>
 #include <list>
 
 #include "Exception.h"
