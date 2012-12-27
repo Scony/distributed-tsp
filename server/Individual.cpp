@@ -70,6 +70,16 @@ bool Individual::operator<(const Individual & individual) const
   return this->rate < individual.rate;
 }
 
+std::pair<Individual,Individual> Individual::crossingOver(Individual & other)
+{
+  return pair<Individual,Individual>(*this,*this);
+}
+
+void Individual::mutate()
+{
+  //
+}
+
 long long Individual::getRate()
 {
   return this->rate;

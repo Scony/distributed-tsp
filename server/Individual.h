@@ -2,6 +2,7 @@
 #define INDIVIDUAL_H
 
 #include <stdlib.h>
+#include <utility>
 
 #include "Graph.h"
 
@@ -19,6 +20,8 @@ class Individual
   Individual(const Individual & individual);
   ~Individual();
   bool operator<(const Individual & individual) const;
+  virtual std::pair<Individual,Individual> crossingOver(Individual & other);
+  virtual void mutate();
   long long getRate();
   std::string toString();
   void shuffle();

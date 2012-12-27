@@ -2,6 +2,7 @@
 
 #include "TspServer.h"
 #include "Dispatcher.h"
+#include "Exception.h"
 
 using namespace std;
 
