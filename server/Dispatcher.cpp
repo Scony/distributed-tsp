@@ -58,22 +58,10 @@ string Dispatcher::request(int id, string query)
     return graph.toString();
   if(query.substr(0,3) == "IND") // individual
     {
-      // char buff[32];
-      // int offset = 4;
-      // int n;
-      // sscanf(query.substr(offset,32).c_str(),"%s",buff);
-      // sscanf(query.substr(offset,32).c_str(),"%d",&n);
-      // offset += strlen(buff) + 1;
-      // int ord[n];
-      // for(int i = 0; i < n; i++)
-      // 	{
-      // 	  sscanf(query.substr(offset,32).c_str(),"%s",buff);
-      // 	  sscanf(query.substr(offset,32).c_str(),"%d",&ord[i]);
-      // 	  offset += strlen(buff) + 1;
-      // 	}
       stringstream ss;
-      ss << query.substr(4);
       int n;
+
+      ss << query.substr(4);
       ss >> n;
       int ord[n];
       for(int i = 0; i < n; i++)
