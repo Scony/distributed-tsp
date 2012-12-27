@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <sstream>
 #include <list>
 
 #include "Exception.h"
