@@ -11,9 +11,8 @@ int main(int argc, char ** argv)
   try
     {
       Client client(argc,argv);
-      //cli.run?
-      Evolution evolution(argc,argv,&client);
-      evolution.run();
+      // Evolution evolution(argc,argv,&client);
+      // evolution.run();
     }
   catch (Exception * e)
     {

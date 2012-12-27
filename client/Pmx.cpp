@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int randEx(int range_min, int range_max)
+int Pmx::randEx(int range_min, int range_max)
 {
   int tmp_range;
   if ( range_max >= range_min ) range_max -= range_min;
@@ -15,28 +15,45 @@ int randEx(int range_min, int range_max)
   return (int)(range_max ? range_min + rand() / (RAND_MAX + 1.0) * (double) (range_max + 1) : range_min);
 }
 
-void swap(int & a, int & b)
+void Pmx::swap(int & a, int & b)
 {
   int tmp = a;
   a = b;
   b = tmp;
 }
 
-// Pmx::Pmx()
-// {
-// }
+Pmx::Pmx(Graph * graph) : Individual(graph)
+{
+}
 
-// Pmx::~Pmx()
-// {
-// }
+Pmx::Pmx(int n, Graph * graph, int * ord) : Individual(n,graph,ord)
+{
+}
 
-pair<Individual,Individual> crossingOver(Individual & x)
+Pmx::Pmx(const Pmx & pmx) : Individual(pmx)
+{
+}
+
+Pmx::~Pmx()
+{
+}
+
+void Pmx::inv(int left, int right)
+{
+  if(left<right)
+    {
+      swap(ord[left],ord[right]);
+      inv(left+1,right-1);
+    }
+}
+
+pair<Individual,Individual> Pmx::crossingOver(Individual & x)
 {
   int l = randEx(1,n-1), r = randEx(1,n-1);
   if(l>r)
     swap(l,r);
-  Pmx a(n,this->graph);
-  Pmx b(n,this->graph);
+  Pmx a(this->graph);
+  Pmx b(this->graph);
   int hashA[n], hashB[n];
   for(int i = 0; i < n; i++)
     {
@@ -45,10 +62,10 @@ pair<Individual,Individual> crossingOver(Individual & x)
     }
   for(int i = l; i <= r; i++)
     {
-      a.ord[i] = x.ord[i];
+      a.ord[i] = x.getOrd(i);
       b.ord[i] = ord[i];
-      hashA[x.ord[i]] = ord[i];
-      hashB[ord[i]] = x.ord[i];
+      hashA[x.getOrd(i)] = ord[i];
+      hashB[ord[i]] = x.getOrd(i);
     }
   for(int i = 0; i < l; i++)
     {
@@ -60,11 +77,11 @@ pair<Individual,Individual> crossingOver(Individual & x)
 	  while(hashA[a.ord[i]]!=-1)
 	    a.ord[i] = hashA[a.ord[i]];
 	}
-      if(hashB[x.ord[i]]==-1)
-	b.ord[i] = x.ord[i];
+      if(hashB[x.getOrd(i)]==-1)
+	b.ord[i] = x.getOrd(i);
       else
 	{
-	  b.ord[i] = hashB[x.ord[i]];
+	  b.ord[i] = hashB[x.getOrd(i)];
 	  while(hashB[b.ord[i]]!=-1)
 	    b.ord[i] = hashB[b.ord[i]];
 	}
@@ -79,11 +96,11 @@ pair<Individual,Individual> crossingOver(Individual & x)
 	  while(hashA[a.ord[i]]!=-1)
 	    a.ord[i] = hashA[a.ord[i]];
 	}
-      if(hashB[x.ord[i]]==-1)
-	b.ord[i] = x.ord[i];
+      if(hashB[x.getOrd(i)]==-1)
+	b.ord[i] = x.getOrd(i);
       else
 	{
-	  b.ord[i] = hashB[x.ord[i]];
+	  b.ord[i] = hashB[x.getOrd(i)];
 	  while(hashB[b.ord[i]]!=-1)
 	    b.ord[i] = hashB[b.ord[i]];
 	}
@@ -93,7 +110,7 @@ pair<Individual,Individual> crossingOver(Individual & x)
   return pair<Individual,Individual>(a,b);
 }
 
-void mutate()
+void Pmx::mutate()
 {
   int a = randEx(1,n-1), b = randEx(1,n-1);
   if(a<b)

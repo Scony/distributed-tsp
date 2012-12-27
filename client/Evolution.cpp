@@ -15,7 +15,7 @@ Evolution::~Evolution()
 {
 }
 
-Evolution::run()
+void Evolution::run()
 {
   //evo loop
 }

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int randEx(int range_min, int range_max)
+int Individual::randEx(int range_min, int range_max)
 {
   int tmp_range;
   if ( range_max >= range_min ) range_max -= range_min;
@@ -15,7 +15,7 @@ int randEx(int range_min, int range_max)
   return (int)(range_max ? range_min + rand() / (RAND_MAX + 1.0) * (double) (range_max + 1) : range_min);
 }
 
-void swap(int & a, int & b)
+void Individual::swap(int & a, int & b)
 {
   int tmp = a;
   a = b;
@@ -83,6 +83,11 @@ void Individual::mutate()
 long long Individual::getRate()
 {
   return this->rate;
+}
+
+int Individual::getOrd(int index)
+{
+  return this->ord[index];
 }
 
 string Individual::toString()

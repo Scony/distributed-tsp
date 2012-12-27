@@ -28,5 +28,13 @@ Client::~Client()
 
 string Client::request(string query)
 {
-  //on INIT return blindreaded MAP
+  char buff[BUFFER];
+
+  if(query == "INIT")
+    {
+      read(sd,buff,BUFFER);
+      return string(buff);
+    }
+
+  return "Not implemented re";  // write n read
 }
