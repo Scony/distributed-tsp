@@ -1,12 +1,18 @@
-#ifndef Pmx_H
-#define Pmx_H
+#ifndef PMX_H
+#define PMX_H
 
-class Pmx
+#include <utilities>
+
+#include "Individual.h"
+
+class Pmx : public Individual
 {
-	//params
-public:
-	Pmx();
-	~Pmx();
+  //params
+ public:
+  /* Pmx(); */
+  /* ~Pmx(); */
+  std::pair<Individual,Individual> crossingOver(Individual & x);
+  void mutate;
 };
 
 #endif
