@@ -5,6 +5,7 @@ Record::Record()
   this->frequence = 10;
   this->mutations = 10;
   this->population = 15;
+  this->startPopulation = 100;
 }
 
 Record::~Record()
@@ -26,6 +27,11 @@ void Record::setPopulation(int population)
   this->population = population;
 }
 
+void Record::setStartPopulation(int startPopulation)
+{
+  this->startPopulation = startPopulation;
+}
+
 int Record::getFrequence()
 {
   return this->frequence;
@@ -39,4 +45,9 @@ int Record::getMutations()
 int Record::getPopulation()
 {
   return this->population;
+}
+
+int Record::getStartPopulation()
+{
+  return this->startPopulation;
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 
 #include "Client.h"
 #include "Evolution.h"
@@ -10,10 +11,10 @@ int main(int argc, char ** argv)
 {
   try
     {
+      srand(time(0));
       Client client(argc,argv);
-      cout << client.request("INIT");
-      // Evolution evolution(argc,argv,&client);
-      // evolution.run();
+      Evolution evolution(argc,argv,&client);
+      evolution.run();
     }
   catch (Exception * e)
     {

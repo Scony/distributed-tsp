@@ -72,12 +72,16 @@ string Dispatcher::request(int id, string query)
 
       return individuals.front().toString();
     }
+  if(query == "BST")		// actual best
+    return individuals.front().toString();
   if(query == "FRQ")		// frequence
     return int2str(records[id]->getFrequence());
   if(query == "MUT")		// mutations
     return int2str(records[id]->getMutations());
   if(query == "POP")		// population
     return int2str(records[id]->getPopulation());
+  if(query == "STP")		// start population
+    return int2str(records[id]->getStartPopulation());
 
   return "-1";			// wrong command
 }

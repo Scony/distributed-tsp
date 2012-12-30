@@ -26,6 +26,22 @@ Graph::Graph(string graph)
     }
 }
 
+// Graph::Graph(const Graph & graph)
+// {
+//   if(this->x && this->y)
+//     {
+//       delete [] x;
+//       delete [] y;
+//     }
+
+//   this->n = graph.n;
+//   this->x = new int[this->n];
+//   this->y = new int[this->n];
+
+//   for(int i = 0; i < this->n; i++)
+//     this->setVertex(i,graph.x[i],graph.y[i]);
+// }
+
 Graph::~Graph()
 {
   if(this->x && this->y)

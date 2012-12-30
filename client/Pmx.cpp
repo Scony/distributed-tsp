@@ -2,27 +2,31 @@
 
 using namespace std;
 
-int Pmx::randEx(int range_min, int range_max)
-{
-  int tmp_range;
-  if ( range_max >= range_min ) range_max -= range_min;
-  else
-    {
-      tmp_range = range_min - range_max;
-      range_min = range_max;
-      range_max = tmp_range;
-    }
-  return (int)(range_max ? range_min + rand() / (RAND_MAX + 1.0) * (double) (range_max + 1) : range_min);
-}
+// int Pmx::randEx(int range_min, int range_max)
+// {
+//   int tmp_range;
+//   if ( range_max >= range_min ) range_max -= range_min;
+//   else
+//     {
+//       tmp_range = range_min - range_max;
+//       range_min = range_max;
+//       range_max = tmp_range;
+//     }
+//   return (int)(range_max ? range_min + rand() / (RAND_MAX + 1.0) * (double) (range_max + 1) : range_min);
+// }
 
-void Pmx::swap(int & a, int & b)
-{
-  int tmp = a;
-  a = b;
-  b = tmp;
-}
+// void Pmx::swap(int & a, int & b)
+// {
+//   int tmp = a;
+//   a = b;
+//   b = tmp;
+// }
 
 Pmx::Pmx(Graph * graph) : Individual(graph)
+{
+}
+
+Pmx::Pmx(string individual, Graph * graph) : Individual(individual,graph)
 {
 }
 
@@ -47,13 +51,13 @@ void Pmx::inv(int left, int right)
     }
 }
 
-pair<Individual,Individual> Pmx::crossingOver(Individual & x)
+pair<Individual*,Individual*> Pmx::crossingOver(Individual & x)
 {
   int l = randEx(1,n-1), r = randEx(1,n-1);
   if(l>r)
     swap(l,r);
-  Pmx a(this->graph);
-  Pmx b(this->graph);
+  Pmx * a = new Pmx(this->graph);
+  Pmx * b = new Pmx(this->graph);
   int hashA[n], hashB[n];
   for(int i = 0; i < n; i++)
     {
@@ -62,52 +66,53 @@ pair<Individual,Individual> Pmx::crossingOver(Individual & x)
     }
   for(int i = l; i <= r; i++)
     {
-      a.ord[i] = x.getOrd(i);
-      b.ord[i] = ord[i];
+      a->ord[i] = x.getOrd(i);
+      b->ord[i] = ord[i];
       hashA[x.getOrd(i)] = ord[i];
       hashB[ord[i]] = x.getOrd(i);
     }
   for(int i = 0; i < l; i++)
     {
       if(hashA[ord[i]]==-1)
-	a.ord[i] = ord[i];
+	a->ord[i] = ord[i];
       else
 	{
-	  a.ord[i] = hashA[ord[i]];
-	  while(hashA[a.ord[i]]!=-1)
-	    a.ord[i] = hashA[a.ord[i]];
+	  a->ord[i] = hashA[ord[i]];
+	  while(hashA[a->ord[i]]!=-1)
+	    a->ord[i] = hashA[a->ord[i]];
 	}
       if(hashB[x.getOrd(i)]==-1)
-	b.ord[i] = x.getOrd(i);
+	b->ord[i] = x.getOrd(i);
       else
 	{
-	  b.ord[i] = hashB[x.getOrd(i)];
-	  while(hashB[b.ord[i]]!=-1)
-	    b.ord[i] = hashB[b.ord[i]];
+	  b->ord[i] = hashB[x.getOrd(i)];
+	  while(hashB[b->ord[i]]!=-1)
+	    b->ord[i] = hashB[b->ord[i]];
 	}
     }
   for(int i = r + 1; i < n; i++)
     {
       if(hashA[ord[i]]==-1)
-	a.ord[i] = ord[i];
+	a->ord[i] = ord[i];
       else
 	{
-	  a.ord[i] = hashA[ord[i]];
-	  while(hashA[a.ord[i]]!=-1)
-	    a.ord[i] = hashA[a.ord[i]];
+	  a->ord[i] = hashA[ord[i]];
+	  while(hashA[a->ord[i]]!=-1)
+	    a->ord[i] = hashA[a->ord[i]];
 	}
       if(hashB[x.getOrd(i)]==-1)
-	b.ord[i] = x.getOrd(i);
+	b->ord[i] = x.getOrd(i);
       else
 	{
-	  b.ord[i] = hashB[x.getOrd(i)];
-	  while(hashB[b.ord[i]]!=-1)
-	    b.ord[i] = hashB[b.ord[i]];
+	  b->ord[i] = hashB[x.getOrd(i)];
+	  while(hashB[b->ord[i]]!=-1)
+	    b->ord[i] = hashB[b->ord[i]];
 	}
     }
-  a.eval();
-  b.eval();
-  return pair<Individual,Individual>(a,b);
+  a->eval();
+  b->eval();
+
+  return pair<Individual*,Individual*>(a,b);
 }
 
 void Pmx::mutate()

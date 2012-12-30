@@ -23,9 +23,9 @@ class Individual
   Individual(std::string individual, Graph * graph);
   Individual(int n, Graph * graph, int * ord);
   Individual(const Individual & individual);
-  ~Individual();
+  virtual ~Individual();
   bool operator<(const Individual & individual) const;
-  virtual std::pair<Individual,Individual> crossingOver(Individual & other);
+  virtual std::pair<Individual*,Individual*> crossingOver(Individual & other);
   virtual void mutate();
   long long getRate();
   int getOrd(int index);

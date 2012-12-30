@@ -17,6 +17,7 @@ class Graph
 public:
   Graph();
   Graph(std::string graph);
+  /* Graph(const Graph & graph); */
   ~Graph();
   void read();
   void read(std::string fileName);

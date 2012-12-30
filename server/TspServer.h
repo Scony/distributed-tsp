@@ -1,6 +1,8 @@
 #ifndef TSPSERVER_H
 #define TSPSERVER_H
 
+#include <iostream>
+
 #include "Server.h"
 #include "Dispatcher.h"
 

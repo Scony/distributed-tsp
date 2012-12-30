@@ -34,17 +34,16 @@ string Client::request(string query)
   if(query != "INIT")
     write(sd,query.c_str(),query.length());
 
-  sleep(1); //zmienic na pollowanie az beda dane
-
   struct pollfd ufds[1];
   ufds[0].fd = this->sd;
   ufds[0].events = POLLIN;
+  
+  while(poll(ufds,1,0) == 0); //wait for data
 
   while(poll(ufds,1,0) && (ufds[0].revents & POLLIN))
     {
       memset(buff,'\0',BUFFER);
       read(sd,buff,BUFFER-1);
-      buff[BUFFER-1] = '\0';
       out += string(buff);
     }
 

@@ -37,6 +37,7 @@ Individual::Individual(Graph * graph)
   this->ord = new int[this->n];
   for(int i = 0; i < this->n; i++)
     ord[i] = i;
+  this->shuffle();
   this->eval();
 }
 
@@ -86,9 +87,12 @@ bool Individual::operator<(const Individual & individual) const
   return this->rate < individual.rate;
 }
 
-std::pair<Individual,Individual> Individual::crossingOver(Individual & other)
+std::pair<Individual*,Individual*> Individual::crossingOver(Individual & other)
 {
-  return pair<Individual,Individual>(*this,*this);
+  Individual * a = new Individual(*this);
+  Individual * b = new Individual(*this);
+
+  return pair<Individual*,Individual*>(a,b);
 }
 
 void Individual::mutate()
