@@ -25,7 +25,7 @@ void Individual::swap(int & a, int & b)
 void Individual::eval()
 {
   this->rate = 0;
-  for(int i = 1; i < n; i++)
+  for(int i = 1; i < this->n; i++)
     this->rate += this->graph->getDistance(ord[i-1],ord[i]);
   this->rate += this->graph->getDistance(ord[n-1],ord[0]);
 }
@@ -34,9 +34,25 @@ Individual::Individual(Graph * graph)
 {
   this->graph = graph;
   this->n = graph->getN();
-  ord = new int[this->n];
+  this->ord = new int[this->n];
   for(int i = 0; i < this->n; i++)
     ord[i] = i;
+  this->eval();
+}
+
+Individual::Individual(std::string individual, Graph * graph)
+{
+  this->graph = graph;
+
+  stringstream ss;
+  ss << individual;
+
+  ss >> this->n;
+  this->ord = new int[this->n];
+
+  for(int i = 0; i < this->n; i++)
+    ss >> this->ord[i];
+
   this->eval();
 }
 

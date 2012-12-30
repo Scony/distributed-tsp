@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <iostream>
+#include <sstream>
 #include <stdio.h>
 #include <math.h>
 
@@ -15,6 +16,7 @@ class Graph
   void setVertex(int v, int x, int y);
 public:
   Graph();
+  Graph(std::string graph);
   ~Graph();
   void read();
   void read(std::string fileName);

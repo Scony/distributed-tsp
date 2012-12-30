@@ -61,11 +61,11 @@ void TspServer::run()
 	  {
 	    memset(buff,'\0',BUFFER);
 	    int ed = read(i,buff,BUFFER);
-	    if(ed==0)
+	    if(ed == 0 || ed == -1)
 	      {
 		close(i);
 		fds[i] = 0;
-		printf("#%d: disconnected.",i);
+		printf("#%d: disconnected\n",i);
 		buff[ed-1] = '\0';
 		string re = dispatcher->request(i,buff);
 		write(i,re.c_str(),re.length());

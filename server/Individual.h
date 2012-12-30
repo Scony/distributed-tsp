@@ -1,6 +1,8 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
+#include <iostream>
+#include <sstream>
 #include <stdlib.h>
 #include <utility>
 
@@ -18,6 +20,7 @@ class Individual
   void eval();
  public:
   Individual(Graph * graph);
+  Individual(std::string individual, Graph * graph);
   Individual(int n, Graph * graph, int * ord);
   Individual(const Individual & individual);
   ~Individual();

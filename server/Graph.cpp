@@ -9,6 +9,23 @@ Graph::Graph()
   this->y = NULL;
 }
 
+Graph::Graph(string graph)
+{
+  stringstream ss;
+  ss << graph;
+
+  ss >> this->n;
+  this->x = new int[this->n];
+  this->y = new int[this->n];
+
+  int a, b;
+  for(int i = 0; i < this->n; i++)
+    {
+      ss >> a >> b;
+      this->setVertex(i,a,b);
+    }
+}
+
 Graph::~Graph()
 {
   if(this->x && this->y)
@@ -89,11 +106,11 @@ int Graph::getN()
 string Graph::toString()
 {
   char buff[32];
-  sprintf(buff,"%d ",this->n);
+  sprintf(buff,"%d",this->n);
   string out = string(buff);
   for(int i = 0; i < this->n; i++)
     {
-      sprintf(buff,"%d %d ",this->x[i],this->y[i]);
+      sprintf(buff," %d %d",this->x[i],this->y[i]);
       out += string(buff);
     }
 
