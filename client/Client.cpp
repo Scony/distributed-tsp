@@ -38,9 +38,9 @@ string Client::request(string query)
   ufds[0].fd = this->sd;
   ufds[0].events = POLLIN;
   
-  while(poll(ufds,1,0) == 0); //wait for data
+  while(poll(ufds,1,1000) == 0); //wait for data
 
-  while(poll(ufds,1,0) && (ufds[0].revents & POLLIN))
+  while(poll(ufds,1,1000) && (ufds[0].revents & POLLIN))
     {
       memset(buff,'\0',BUFFER);
       read(sd,buff,BUFFER-1);
