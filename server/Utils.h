@@ -3,12 +3,14 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 
 class Utils
 {
  public:
   static std::string int2str(int var);
   static int str2int(std::string in);
+  static int randEx(int range_min, int range_max);
 };
 
 #endif

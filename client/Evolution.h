@@ -7,6 +7,7 @@
 
 #include "Client.h"
 #include "Exception.h"
+#include "Utils.h"
 #include "Box.h"
 #include "Pmx.h"
 
@@ -24,7 +25,6 @@ class Evolution
   Evolution(int argc, char ** argv, Client * client);
   ~Evolution();
   void run();
-  static int randEx(int range_min, int range_max);
 };
 
 #endif

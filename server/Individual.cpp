@@ -25,6 +25,7 @@ void Individual::swap(int & a, int & b)
 void Individual::eval()
 {
   this->rate = 0;
+
   for(int i = 1; i < this->n; i++)
     this->rate += this->graph->getDistance(ord[i-1],ord[i]);
   this->rate += this->graph->getDistance(ord[n-1],ord[0]);

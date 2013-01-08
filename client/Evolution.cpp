@@ -2,27 +2,18 @@
 
 using namespace std;
 
-int str2int(string in)
-{
-  int out;
-  stringstream ss;
-  ss << in;
-  ss >> out;
-  return out;
-}
-
 Evolution::Evolution(int argc, char ** argv, Client * client)
 {
   if(argc < 4)
     throw new Exception("Too few arguments");
 
-  this->algorithm = str2int(string(argv[3]));
+  this->algorithm = Utils::str2int(string(argv[3]));
   this->client = client;
   this->graph = new Graph(this->client->request("INIT"));
-  this->startPopulation = str2int(client->request("STP"));
-  this->populationCut = str2int(client->request("POP"));
-  this->mutations = str2int(client->request("MUT"));
-  this->frequence = str2int(client->request("FRQ"));
+  this->startPopulation = Utils::str2int(client->request("STP"));
+  this->populationCut = Utils::str2int(client->request("POP"));
+  this->mutations = Utils::str2int(client->request("MUT"));
+  this->frequence = Utils::str2int(client->request("FRQ"));
 
   switch(this->algorithm)
     {
@@ -51,7 +42,6 @@ void Evolution::run()
       //sort
       population.sort();
       cout << population.front().individual->getRate() << endl;
-      cout << this->graph->getN() << endl;
 
       //selection
       while(population.size() > (unsigned int)this->populationCut)
@@ -94,22 +84,9 @@ void Evolution::run()
 
       //mutation
       for(list<Box>::iterator j = population.begin(); j != population.end(); j++)
-      	if(randEx(1,100) <= this->mutations)
+      	if(Utils::randEx(1,100) <= this->mutations)
   	  j->individual->mutate();
 
 
     }
-}
-
-int Evolution::randEx(int range_min, int range_max)
-{
-  int tmp_range;
-  if ( range_max >= range_min ) range_max -= range_min;
-  else
-    {
-      tmp_range = range_min - range_max;
-      range_min = range_max;
-      range_max = tmp_range;
-    }
-  return (int)(range_max ? range_min + rand() / (RAND_MAX + 1.0) * (double) (range_max + 1) : range_min);
 }

@@ -29,7 +29,7 @@ Client::~Client()
 string Client::request(string query)
 {
   char buff[BUFFER];
-  string out = "";
+  memset(buff,'\0',BUFFER);
 
   if(query != "INIT")
     {
@@ -37,23 +37,17 @@ string Client::request(string query)
       write(sd,query.c_str(),query.length());
     }
 
-  // struct pollfd ufds[1];
-  // ufds[0].fd = this->sd;
-  // ufds[0].events = POLLIN;
-  
-  // while(poll(ufds,1,1000) == 0); //wait for data
-
-  int red = read(sd,buff,BUFFER-1);
+  int bytes = read(sd,buff,BUFFER-1);
   int contLen;
   sscanf(buff,"%d",&contLen);
-  out += string(buff).substr(Utils::int2str(contLen).length() + 1);
+  string out = string(buff);
 
-  while((unsigned int)red != contLen + Utils::int2str(contLen).length() + 1)
+  while((unsigned int)bytes != contLen + Utils::int2str(contLen).length() + 1)
     {
       memset(buff,'\0',BUFFER);
-      red += read(sd,buff,BUFFER-1);
+      bytes += read(sd,buff,BUFFER-1);
       out += string(buff);
     }
 
-  return out;
+  return out.substr(Utils::int2str(contLen).length()+1);
 }
