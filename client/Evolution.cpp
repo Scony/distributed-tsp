@@ -71,6 +71,7 @@ void Evolution::run()
   	{
 	  cout << "S" << endl;
   	  counter = 0;
+
 	  switch(this->algorithm)
 	    {
 	    case 2:
@@ -80,6 +81,10 @@ void Evolution::run()
 	      population.push_back(Box(new Pmx(client->request("IND " + population.front().individual->toString()),this->graph)));
 	      break;
 	    }
+
+	  this->populationCut = Utils::str2int(client->request("POP"));
+	  this->mutations = Utils::str2int(client->request("MUT"));
+	  this->frequence = Utils::str2int(client->request("FRQ"));
   	}
 
       //mutation

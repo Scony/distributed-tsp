@@ -316,7 +316,9 @@ string Dispatcher::request(int id, string query)
 
       return individuals.front().toString();
     }
-  if(query == "BST")		// actual best
+  if(query == "BRT")		// actual best rate
+    return Utils::int2str(individuals.front().getRate());
+  if(query == "BST")		// actual best tour
     return individuals.front().toString();
   if(query == "FRQ")		// frequence
     return Utils::int2str(records[id]->getFrequence());
