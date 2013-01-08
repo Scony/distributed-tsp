@@ -7,6 +7,8 @@
 #include "Dispatcher.h"
 #include "Utils.h"
 
+#define BUFFER 2049
+
 class TspServer : public Server
 {
   Dispatcher * dispatcher;

@@ -38,7 +38,7 @@ string Client::request(string query)
     }
 
   int bytes = read(sd,buff,BUFFER-1);
-  int contLen;
+  unsigned int contLen;
   sscanf(buff,"%d",&contLen);
   string out = string(buff);
 
