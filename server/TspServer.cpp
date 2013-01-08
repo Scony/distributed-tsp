@@ -70,7 +70,7 @@ void TspServer::run()
 		close(i);
 		fds[i] = 0;
 		printf("#%d: disconnected\n",i);
-		dispatcher->request(i,string(buff));
+		dispatcher->request(i,"");
 		continue;
 	      }
 	    unsigned int contLen;

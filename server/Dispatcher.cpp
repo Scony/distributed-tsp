@@ -235,7 +235,7 @@ string Dispatcher::interpret(string query)
     {
       int cid;
       ss >> cid >> command;
-      if(!records[cid])
+      if(cid < 0 || MAX_RECORDS <= cid || !records[cid])
 	return "Client doesn't exists";
 
       if(command == "set")
@@ -298,6 +298,11 @@ string Dispatcher::request(int id, string query)
   if(!records[id])
     records[id] = new Record(defaults);
 
+  if(query == "")		// disconnected
+    {
+      delete records[id];
+      records[id] = NULL;
+    }
   if(query == "MAP")		// map
     return graph.toString();
   if(query.substr(0,3) == "IND") // individual

@@ -38,6 +38,8 @@ string Client::request(string query)
     }
 
   int bytes = read(sd,buff,BUFFER-1);
+  if(bytes == 0)
+    throw new Exception("Disconnected");
   unsigned int contLen;
   sscanf(buff,"%d",&contLen);
   string out = string(buff);
@@ -45,7 +47,10 @@ string Client::request(string query)
   while((unsigned int)bytes != contLen + Utils::int2str(contLen).length() + 1)
     {
       memset(buff,'\0',BUFFER);
-      bytes += read(sd,buff,BUFFER-1);
+      int tmp = read(sd,buff,BUFFER-1);
+      if(tmp == 0)
+	throw new Exception("Disconnected");
+      bytes += tmp;
       out += string(buff);
     }
 
