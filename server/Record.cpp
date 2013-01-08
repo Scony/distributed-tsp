@@ -1,5 +1,7 @@
 #include "Record.h"
 
+using namespace std;
+
 Record::Record()
 {
   this->frequence = 10;
@@ -50,4 +52,12 @@ int Record::getPopulation()
 int Record::getStartPopulation()
 {
   return this->startPopulation;
+}
+
+string Record::toString()
+{
+  return "Start population: " + Utils::int2str(this->startPopulation) +
+    "\nPopulation cut: " + Utils::int2str(this->population) +
+    "\nMutation probability: " + Utils::int2str(this->mutations) +
+    "\nCommunication frequence: " + Utils::int2str(this->frequence);
 }

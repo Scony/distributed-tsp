@@ -2,10 +2,10 @@
 
 using namespace std;
 
-string Utils::int2str(int var)
+string Utils::int2str(int in)
 {
   char buff[16];
-  sprintf(buff,"%d",var);
+  sprintf(buff,"%d",in);
   return string(buff);
 }
 

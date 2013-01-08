@@ -1,6 +1,8 @@
 #ifndef RECORD_H
 #define RECORD_H
 
+#include "Utils.h"
+
 class Record
 {
   int frequence;
@@ -18,6 +20,7 @@ class Record
   int getMutations();
   int getPopulation();
   int getStartPopulation();
+  std::string toString();
 };
 
 #endif

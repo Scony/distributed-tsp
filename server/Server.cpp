@@ -14,6 +14,9 @@ Server::Server(int argc, char ** argv)
   if(this->sd == -1)
     throw new Exception("Socket fail");
 
+  int yes = 1;
+  setsockopt(this->sd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(yes));
+
   this->init();
 }
 
