@@ -32,18 +32,26 @@ string Client::request(string query)
   string out = "";
 
   if(query != "INIT")
-    write(sd,query.c_str(),query.length());
+    {
+      query = Utils::int2str(query.length()) + " " + query;
+      write(sd,query.c_str(),query.length());
+    }
 
-  struct pollfd ufds[1];
-  ufds[0].fd = this->sd;
-  ufds[0].events = POLLIN;
+  // struct pollfd ufds[1];
+  // ufds[0].fd = this->sd;
+  // ufds[0].events = POLLIN;
   
-  while(poll(ufds,1,1000) == 0); //wait for data
+  // while(poll(ufds,1,1000) == 0); //wait for data
 
-  while(poll(ufds,1,1000) && (ufds[0].revents & POLLIN))
+  int red = read(sd,buff,BUFFER-1);
+  int contLen;
+  sscanf(buff,"%d",&contLen);
+  out += string(buff).substr(Utils::int2str(contLen).length() + 1);
+
+  while((unsigned int)red != contLen + Utils::int2str(contLen).length() + 1)
     {
       memset(buff,'\0',BUFFER);
-      read(sd,buff,BUFFER-1);
+      red += read(sd,buff,BUFFER-1);
       out += string(buff);
     }
 

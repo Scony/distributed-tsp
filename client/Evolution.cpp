@@ -51,6 +51,7 @@ void Evolution::run()
       //sort
       population.sort();
       cout << population.front().individual->getRate() << endl;
+      cout << this->graph->getN() << endl;
 
       //selection
       while(population.size() > (unsigned int)this->populationCut)

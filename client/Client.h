@@ -13,6 +13,7 @@
 
 #include "Graph.h"
 #include "Exception.h"
+#include "Utils.h"
 
 typedef struct sockaddr_in sockaddr_in;
 

@@ -53,9 +53,10 @@ void TspServer::run()
 	  int ad = accept(sd,(struct sockaddr *)&oaddr,(unsigned int*)&oaddrlen);
 	  if(ad == -1)
 	    throw new Exception("Accept fail");
-	  printf("New connection #%d\n",ad);
+	  printf("#%d connected\n",ad);
 	  fds[ad] = 1;
 	  string re = dispatcher->request(ad,"MAP");
+	  re = Utils::int2str(re.length()) + " " + re;
 	  write(ad,re.c_str(),re.length());
 	}
       for(int i = 3; i < 1024; i++)
@@ -73,20 +74,24 @@ void TspServer::run()
 		dispatcher->request(i,string(buff));
 		continue;
 	      }
+	    unsigned int contLen;
+	    sscanf(buff,"%d",&contLen);
 	    out += string(buff);
+	    out = out.substr(Utils::int2str(contLen).length() + 1);
 	    if(out.length() > 20)
 	      printf("#%d: %s...\n",i,out.substr(0,20).c_str());
 	    else
 	      printf("#%d: %s\n",i,out.c_str());
-	    while(ed == BUFFER-1)
+	    while((unsigned int)ed != contLen + Utils::int2str(contLen).length() + 1)
 	      {
 		memset(buff,'\0',BUFFER);
-		ed = read(i,buff,BUFFER-1);
+		ed += read(i,buff,BUFFER-1);
 		out += string(buff);
 	      }
 	    if(out[out.length()-1] == '\n')
 	      out = out.substr(0,out.length()-1);
 	    string re = dispatcher->request(i,out);
+	    re = Utils::int2str(re.length()) + " " + re;
 	    write(i,re.c_str(),re.length());
 	  }
     }
