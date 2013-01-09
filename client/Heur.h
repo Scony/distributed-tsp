@@ -1,23 +1,25 @@
-/* #ifndef PMX_H */
-/* #define PMX_H */
+#ifndef HEUR_H
+#define HEUR_H
 
-/* #include <utility> */
+#include <utility>
+#include <list>
 
-/* #include "Individual.h" */
+#include "Individual.h"
 
-/* class Pmx : public Individual */
-/* { */
-/*   /\* int randEx(int range_min, int range_max); *\/ */
-/*   /\* void swap(int & a, int & b); *\/ */
-/*   void inv(int left, int right); */
-/*  public: */
-/*   Pmx(Graph * graph); */
-/*   Pmx(std::string individual, Graph * graph); */
-/*   Pmx(int n, Graph * graph, int * ord); */
-/*   Pmx(const Pmx & pmx); */
-/*   ~Pmx(); */
-/*   std::pair<Individual*,Individual*> crossingOver(Individual & x); */
-/*   void mutate(); */
-/* }; */
+class Heur : public Individual
+{
+  int * stick;
+  void ord2stick();
+  void stick2ord();
+ public:
+  Heur(Graph * graph);
+  Heur(std::string individual, Graph * graph);
+  Heur(int n, Graph * graph, int * ord);
+  Heur(const Heur & heur);
+  Heur(const Individual & ind);
+  ~Heur();
+  std::pair<Individual*,Individual*> crossingOver(Individual & x);
+  void mutate();
+};
 
-/* #endif */
+#endif

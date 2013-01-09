@@ -18,9 +18,9 @@ Evolution::Evolution(int argc, char ** argv, Client * client)
   switch(this->algorithm)
     {
     case 2:
-      // this->population.push_back(Individual(client.request("BST"),&graph));
-      // for(int i = 0; i < this->startPopulation; i++)
-      // 	population.push_back(Individual(&this->graph));
+      this->population.push_back(Box(new Heur(client->request("BST"),this->graph)));
+      for(int i = 0; i < this->startPopulation; i++)
+	population.push_back(Box(new Heur(this->graph)));
       break;
     default:
       this->population.push_back(Box(new Pmx(client->request("BST"),this->graph)));
@@ -75,7 +75,7 @@ void Evolution::run()
 	  switch(this->algorithm)
 	    {
 	    case 2:
-	      //
+	      population.push_back(Box(new Heur(client->request("IND " + population.front().individual->toString()),this->graph)));
 	      break;
 	    default:
 	      population.push_back(Box(new Pmx(client->request("IND " + population.front().individual->toString()),this->graph)));

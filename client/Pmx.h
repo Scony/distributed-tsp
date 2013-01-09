@@ -7,8 +7,6 @@
 
 class Pmx : public Individual
 {
-  /* int randEx(int range_min, int range_max); */
-  /* void swap(int & a, int & b); */
   void inv(int left, int right);
  public:
   Pmx(Graph * graph);

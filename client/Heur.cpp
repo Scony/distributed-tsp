@@ -1,126 +1,205 @@
-// #include "Pmx.h"
+#include "Heur.h"
 
-// using namespace std;
+using namespace std;
 
-// // int Pmx::randEx(int range_min, int range_max)
-// // {
-// //   int tmp_range;
-// //   if ( range_max >= range_min ) range_max -= range_min;
-// //   else
-// //     {
-// //       tmp_range = range_min - range_max;
-// //       range_min = range_max;
-// //       range_max = tmp_range;
-// //     }
-// //   return (int)(range_max ? range_min + rand() / (RAND_MAX + 1.0) * (double) (range_max + 1) : range_min);
-// // }
+Heur::Heur(Graph * graph) : Individual(graph)
+{
+  stick = new int[graph->getN()];
 
-// // void Pmx::swap(int & a, int & b)
-// // {
-// //   int tmp = a;
-// //   a = b;
-// //   b = tmp;
-// // }
+  ord2stick();
+}
 
-// Pmx::Pmx(Graph * graph) : Individual(graph)
-// {
-// }
+Heur::Heur(string individual, Graph * graph) : Individual(individual,graph)
+{
+  stick = new int[graph->getN()];
 
-// Pmx::Pmx(string individual, Graph * graph) : Individual(individual,graph)
-// {
-// }
+  ord2stick();
+}
 
-// Pmx::Pmx(int n, Graph * graph, int * ord) : Individual(n,graph,ord)
-// {
-// }
+Heur::Heur(int n, Graph * graph, int * ord) : Individual(n,graph,ord)
+{
+  stick = new int[n];
 
-// Pmx::Pmx(const Pmx & pmx) : Individual(pmx)
-// {
-// }
+  ord2stick();
+}
 
-// Pmx::~Pmx()
-// {
-// }
+Heur::Heur(const Heur & heur) : Individual(heur)
+{
+  stick = new int[n];
 
-// void Pmx::inv(int left, int right)
-// {
-//   if(left<right)
-//     {
-//       swap(ord[left],ord[right]);
-//       inv(left+1,right-1);
-//     }
-// }
+  for(int i = 0; i < n; i++)
+    stick[i] = heur.stick[i];
+}
 
-// pair<Individual*,Individual*> Pmx::crossingOver(Individual & x)
-// {
-//   int l = randEx(1,n-1), r = randEx(1,n-1);
-//   if(l>r)
-//     swap(l,r);
-//   Pmx * a = new Pmx(this->graph);
-//   Pmx * b = new Pmx(this->graph);
-//   int hashA[n], hashB[n];
-//   for(int i = 0; i < n; i++)
-//     {
-//       hashA[i] = -1;
-//       hashB[i] = -1;
-//     }
-//   for(int i = l; i <= r; i++)
-//     {
-//       a->ord[i] = x.getOrd(i);
-//       b->ord[i] = ord[i];
-//       hashA[x.getOrd(i)] = ord[i];
-//       hashB[ord[i]] = x.getOrd(i);
-//     }
-//   for(int i = 0; i < l; i++)
-//     {
-//       if(hashA[ord[i]]==-1)
-// 	a->ord[i] = ord[i];
-//       else
-// 	{
-// 	  a->ord[i] = hashA[ord[i]];
-// 	  while(hashA[a->ord[i]]!=-1)
-// 	    a->ord[i] = hashA[a->ord[i]];
-// 	}
-//       if(hashB[x.getOrd(i)]==-1)
-// 	b->ord[i] = x.getOrd(i);
-//       else
-// 	{
-// 	  b->ord[i] = hashB[x.getOrd(i)];
-// 	  while(hashB[b->ord[i]]!=-1)
-// 	    b->ord[i] = hashB[b->ord[i]];
-// 	}
-//     }
-//   for(int i = r + 1; i < n; i++)
-//     {
-//       if(hashA[ord[i]]==-1)
-// 	a->ord[i] = ord[i];
-//       else
-// 	{
-// 	  a->ord[i] = hashA[ord[i]];
-// 	  while(hashA[a->ord[i]]!=-1)
-// 	    a->ord[i] = hashA[a->ord[i]];
-// 	}
-//       if(hashB[x.getOrd(i)]==-1)
-// 	b->ord[i] = x.getOrd(i);
-//       else
-// 	{
-// 	  b->ord[i] = hashB[x.getOrd(i)];
-// 	  while(hashB[b->ord[i]]!=-1)
-// 	    b->ord[i] = hashB[b->ord[i]];
-// 	}
-//     }
-//   a->eval();
-//   b->eval();
+Heur::Heur(const Individual & ind) : Individual(ind)
+{
+  stick = new int[n];
 
-//   return pair<Individual*,Individual*>(a,b);
-// }
+  ord2stick();
+}
 
-// void Pmx::mutate()
-// {
-//   int a = randEx(1,n-1), b = randEx(1,n-1);
-//   if(a<b)
-//     inv(a,b);
-//   else
-//     inv(b,a);
-//   eval();
-// }
+Heur::~Heur()
+{
+  delete [] stick;
+}
+
+void Heur::ord2stick()
+{
+  for(int i = 1; i < n; i++)
+    stick[ord[i-1]] = ord[i];
+  stick[ord[n-1]] = ord[0];
+}
+
+void Heur::stick2ord()
+{
+  int j = 0;
+  for(int i = 0; i < n; i++)
+    {
+      ord[i] = stick[j];
+      j = stick[j];
+    }
+
+  eval();
+}
+
+pair<Individual*,Individual*> Heur::crossingOver(Individual & ind)
+{
+  Heur x(ind);
+  Heur * rslt = new Heur(graph);
+  list<int> remain;
+  for(int i = 1; i < n; i++)
+    remain.push_back(i);
+  int actual = randEx(1,remain.size()-1);
+  remain.remove(actual);
+  rslt->stick[0] = actual;
+  for(int i = 1; i < n-1; i++)
+    {
+      bool flag1 = false, flag2= false;
+      for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
+	{
+	  if(*j==stick[actual])
+	    flag1 = true;
+	  if(*j==x.stick[actual])
+	    flag2 = true;
+	  if(flag1 && flag2)
+	    break;
+	}
+      if(flag1 && flag2)
+	{
+	  if(graph->getDistance(actual,stick[actual])<graph->getDistance(actual,x.stick[actual]))
+	    {
+	      rslt->stick[actual] = stick[actual];
+	      actual = stick[actual];
+	      remain.remove(actual);
+	    } else
+	    {
+	      rslt->stick[actual] = x.stick[actual];
+	      actual = x.stick[actual];
+	      remain.remove(actual);
+	    }
+	} else if(flag1)
+	{
+	  rslt->stick[actual] = stick[actual];
+	  actual = stick[actual];
+	  remain.remove(actual);
+	} else if(flag2)
+	{
+	  rslt->stick[actual] = x.stick[actual];
+	  actual = x.stick[actual];
+	  remain.remove(actual);
+	} else
+	{
+	  //Q max statyczne
+	  // int which = remain.front();
+	  // int min = graph->getDistance(actual,which);
+	  // for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
+	  //   if(graph->getDistance(actual,*j)<min)
+	  //     {
+	  // 	which = *j;
+	  // 	min = graph->getDistance(actual,*j);
+	  //     }
+	  // rslt->stick[actual] = which;
+	  // actual = which;
+	  // remain.remove(actual);
+	  //Q dynamiczne
+	  /*int q = 1 + floor(remain.size()/5);
+	    int tmp[remain.size()];
+	    int k = 0;
+	    for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
+	    tmp[k++] = *j;
+	    int rands[q];
+	    for(int j = 0; j < q; j++)
+	    rands[j] = randEx(0,remain.size()-1);
+	    int which = tmp[rands[0]];
+	    int min = neighbourMatrix[actual][which];
+	    for(int j = 1; j < q; j++)
+	    if(neighbourMatrix[actual][tmp[rands[j]]]<min)
+	    {
+	    which = tmp[rands[j]];
+	    min = neighbourMatrix[actual][tmp[rands[j]]];
+	    }
+	    rslt.stick[actual] = which;
+	    actual = which;
+	    remain.remove(actual);*/
+	  //Q ustalane statyczne
+	  int q = 5;
+	  int tmp[remain.size()];
+	  int k = 0;
+	  for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
+	    tmp[k++] = *j;
+	  int rands[q];
+	  for(int j = 0; j < q; j++)
+	    rands[j] = randEx(0,remain.size()-1);
+	  int which = tmp[rands[0]];
+	  int min = graph->getDistance(actual,which);
+	  for(int j = 1; j < q; j++)
+	    if(graph->getDistance(actual,tmp[rands[j]])<min)
+	      {
+		which = tmp[rands[j]];
+		min = graph->getDistance(actual,tmp[rands[j]]);
+	      }
+	  rslt->stick[actual] = which;
+	  actual = which;
+	  remain.remove(actual);
+	  //Q=1 statyczne
+	  /*int which = randEx(0,remain.size()-1);
+	    int re;
+	    for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
+	    if(which--==0)
+	    {
+	    re = *j;
+	    break;
+	    }
+	    rslt.stick[actual] = re;
+	    actual = re;
+	    remain.remove(actual);*/
+	}
+    }
+  rslt->stick[actual] = 0;
+  rslt->stick2ord();
+  rslt->eval();
+
+  Heur * rsltCpy = new Heur(*rslt);
+
+  return pair<Individual*,Individual*>(rslt,rsltCpy);
+}
+
+void Heur::mutate()
+{
+  int a = randEx(0,n-1);
+  int b = randEx(0,n-1);
+
+  while(a == b)
+    b = randEx(0,n-1);
+
+  for(int i = 0; i < n; i++)
+    if(stick[i] == a)
+      stick[i] = b;
+    else if(stick[i] == b)
+      stick[i] = a;
+
+  swap(stick[a],stick[b]);
+
+  stick2ord();
+  eval();
+}

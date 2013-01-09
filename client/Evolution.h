@@ -10,6 +10,7 @@
 #include "Utils.h"
 #include "Box.h"
 #include "Pmx.h"
+#include "Heur.h"
 
 class Evolution
 {
