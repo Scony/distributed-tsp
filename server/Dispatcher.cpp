@@ -172,6 +172,23 @@ string Dispatcher::interpret(string query)
 		return Utils::int2str(defaults.getStartPopulation());
 	    }
 
+	  if(command == "vec")
+	    {
+	      int frq, mut, pop, stp;
+	      ss >> stp >> pop >> mut >> frq;
+
+	      if(frq > 0)
+		defaults.setFrequence(frq);
+	      if(mut >= 0 && mut <= 100)
+		defaults.setMutations(mut);
+	      if(pop > 0)
+		defaults.setPopulation(pop);
+	      if(stp > 0)
+		defaults.setStartPopulation(stp);
+
+	      return " ";
+	    }
+
 	  return this->defaults.toString();
 	}
 

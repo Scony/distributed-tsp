@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "Graph.h"
+#include "Utils.h"
 
 class Individual
 {

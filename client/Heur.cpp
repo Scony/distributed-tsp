@@ -64,116 +64,60 @@ void Heur::stick2ord()
 
 pair<Individual*,Individual*> Heur::crossingOver(Individual & ind)
 {
-  Heur x(ind);
+  Heur heur(ind);
   Heur * rslt = new Heur(graph);
-  list<int> remain;
+
+  set<int> remain;
   for(int i = 1; i < n; i++)
-    remain.push_back(i);
-  int actual = randEx(1,remain.size()-1);
-  remain.remove(actual);
+    remain.insert(i);
+
+  int actual = Utils::randEx(1,n-1);
+  remain.erase(actual);
   rslt->stick[0] = actual;
   for(int i = 1; i < n-1; i++)
     {
-      bool flag1 = false, flag2= false;
-      for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
+      int a = remain.count(stick[actual]);
+      int b = remain.count(heur.stick[actual]);
+
+      if(a && b)
 	{
-	  if(*j==stick[actual])
-	    flag1 = true;
-	  if(*j==x.stick[actual])
-	    flag2 = true;
-	  if(flag1 && flag2)
-	    break;
-	}
-      if(flag1 && flag2)
-	{
-	  if(graph->getDistance(actual,stick[actual])<graph->getDistance(actual,x.stick[actual]))
+	  if(graph->getDistance(actual,stick[actual]) < graph->getDistance(actual,heur.stick[actual]))
 	    {
 	      rslt->stick[actual] = stick[actual];
 	      actual = stick[actual];
-	      remain.remove(actual);
 	    } else
 	    {
-	      rslt->stick[actual] = x.stick[actual];
-	      actual = x.stick[actual];
-	      remain.remove(actual);
+	      rslt->stick[actual] = heur.stick[actual];
+	      actual = heur.stick[actual];
 	    }
-	} else if(flag1)
+	  remain.erase(actual);
+	  continue;
+	}
+
+      if(a)
 	{
 	  rslt->stick[actual] = stick[actual];
 	  actual = stick[actual];
-	  remain.remove(actual);
-	} else if(flag2)
-	{
-	  rslt->stick[actual] = x.stick[actual];
-	  actual = x.stick[actual];
-	  remain.remove(actual);
-	} else
-	{
-	  //Q max statyczne
-	  // int which = remain.front();
-	  // int min = graph->getDistance(actual,which);
-	  // for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
-	  //   if(graph->getDistance(actual,*j)<min)
-	  //     {
-	  // 	which = *j;
-	  // 	min = graph->getDistance(actual,*j);
-	  //     }
-	  // rslt->stick[actual] = which;
-	  // actual = which;
-	  // remain.remove(actual);
-	  //Q dynamiczne
-	  /*int q = 1 + floor(remain.size()/5);
-	    int tmp[remain.size()];
-	    int k = 0;
-	    for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
-	    tmp[k++] = *j;
-	    int rands[q];
-	    for(int j = 0; j < q; j++)
-	    rands[j] = randEx(0,remain.size()-1);
-	    int which = tmp[rands[0]];
-	    int min = neighbourMatrix[actual][which];
-	    for(int j = 1; j < q; j++)
-	    if(neighbourMatrix[actual][tmp[rands[j]]]<min)
-	    {
-	    which = tmp[rands[j]];
-	    min = neighbourMatrix[actual][tmp[rands[j]]];
-	    }
-	    rslt.stick[actual] = which;
-	    actual = which;
-	    remain.remove(actual);*/
-	  //Q ustalane statyczne
-	  int q = 5;
-	  int tmp[remain.size()];
-	  int k = 0;
-	  for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
-	    tmp[k++] = *j;
-	  int rands[q];
-	  for(int j = 0; j < q; j++)
-	    rands[j] = randEx(0,remain.size()-1);
-	  int which = tmp[rands[0]];
-	  int min = graph->getDistance(actual,which);
-	  for(int j = 1; j < q; j++)
-	    if(graph->getDistance(actual,tmp[rands[j]])<min)
-	      {
-		which = tmp[rands[j]];
-		min = graph->getDistance(actual,tmp[rands[j]]);
-	      }
-	  rslt->stick[actual] = which;
-	  actual = which;
-	  remain.remove(actual);
-	  //Q=1 statyczne
-	  /*int which = randEx(0,remain.size()-1);
-	    int re;
-	    for(list<int>::iterator j = remain.begin(); j!=remain.end(); j++)
-	    if(which--==0)
-	    {
-	    re = *j;
-	    break;
-	    }
-	    rslt.stick[actual] = re;
-	    actual = re;
-	    remain.remove(actual);*/
+	  remain.erase(actual);
+	  continue;
 	}
+
+      if(b)
+	{
+	  rslt->stick[actual] = heur.stick[actual];
+	  actual = heur.stick[actual];
+	  remain.erase(actual);
+	  continue;
+	}
+
+      int r = Utils::randEx(1,remain.size());
+      set<int>::iterator j = remain.begin(); 
+      while(--r)
+	j++;
+
+      rslt->stick[actual] = *j;
+      actual = *j;
+      remain.erase(j);
     }
   rslt->stick[actual] = 0;
   rslt->stick2ord();

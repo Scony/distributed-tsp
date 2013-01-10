@@ -2,7 +2,7 @@
 #define HEUR_H
 
 #include <utility>
-#include <list>
+#include <set>
 
 #include "Individual.h"
 
